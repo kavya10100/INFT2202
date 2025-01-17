@@ -1,3 +1,10 @@
+/*
+Name: Kavya Ganatra
+File Name: create.js
+Course: INFT2202
+Date: 17 jan 2024
+Description: this is my create.js
+*/
 // tell us what page we're on
 console.log('we are on the add page');
 

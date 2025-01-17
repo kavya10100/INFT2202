@@ -1,4 +1,11 @@
 /*
+Name: Kavya Ganatra
+File Name: animal.servise.mock.js
+Course: INFT2202
+Date: 17 jan 2024
+Description: this is my animal.servise.mock.js
+*/
+/*
  *  Service constructor
  */
 function AnimalService() {
