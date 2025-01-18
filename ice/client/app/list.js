@@ -1,4 +1,5 @@
-
+/*Name: Kavya Ganatra
+File: list.js*/
 console.log('we are on the list page');
 
 /* do table stuff */
