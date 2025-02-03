@@ -1,0 +1,79 @@
+<!--
+Name: Cheng He
+Description: dom demo page
+-->
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <title>INFT 2202</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header class="d-flex justify-content-center py-3">
+    </header>
+    <main class="flex-shrink-0">
+        <h1>Week 3</h1>
+        <h2>ES6</h2>
+        <a href="https://www.geeksforgeeks.org/introduction-to-es6/">Introduction to ES6</a>
+        <h3><a href="https://www.javascripttutorial.net/es6-modules/">ES6 Modules</a></h3>
+        <a href="https://inft2202.opentech.durhamcollege.org/notes/season2/modules">Differences between ESM / CommonJS</a>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Storage">Storage Api</a>
+        <h2>Node.js</h2>
+        <h3><a href="https://www.geeksforgeeks.org/node-js-introduction/">Introduction to Node.js</a></h3>
+        <p>Node.js is an open-source and cross-platform JavaScript runtime environment.</p>
+        <h3><a href="https://www.freecodecamp.org/news/what-is-npm-a-node-package-manager-tutorial-for-beginners/">
+            Introduction to Package Management via NPM</a></h3>
+        <p>NPM – or "Node Package Manager" – is the default package manager for JavaScript's runtime Node.js.</p>
+        <h4>Downloading NPM</h4>
+        <ul>
+            <li>launch VS Code, open client folder.
+                <img src="client.png">
+            </li>
+            <li>npm init</li>
+            <li>npm i eslint --save-dev</li>
+            <li>package.json
+                <pre>
+                    <code>
+{
+    "name": "client",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint \"app/**/*.js\""
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "eslint": "^9.18.0"
+    }
+}                          
+                    </code>
+                </pre>
+            </li>
+            <li>eslint.config.js
+                <pre>
+                <code>
+import globals from "globals";
+import pluginJs from "@eslint/js";
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  {languageOptions: { globals: globals.browser }},
+  pluginJs.configs.recommended,
+];
+            </code>
+            </pre>
+        </li>
+        <li>Add node_modules to .gitignore</li>
+        </ul>
+    </main>
+</body>
+</html>
