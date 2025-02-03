@@ -1,7 +1,3 @@
-/*
- *  Name: Kavya Ganatra
-    File: create.js
- */
 // tell us what page we're on
 console.log('we are on the add page');
 

@@ -1,6 +1,5 @@
 <!--
-Name: Kavya Ganatra
-File name: animal.html
+Name: kavya
 -->
 <!DOCTYPE html>
 <html lang="en-us">
@@ -13,7 +12,9 @@ File name: animal.html
     <script defer type="module">
       import animalBuilder from  "./app/animals/index.js";
 
-      const animal = animalBuilder();
+      const params = new URL(document.location).searchParams;
+      const name = params.get("name");
+      const animal = animalBuilder(name);
       
       document.querySelector('main div h1').innerHTML = animal.description;
       const container = document.querySelector('main .container');
@@ -42,7 +43,7 @@ File name: animal.html
           <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
             <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
           </a>
-          <span class="mb-3 mb-md-0 text-body-secondary">© <span id="copyrightYear"></span> Kavya Ganatra, Inc</span>
+          <span class="mb-3 mb-md-0 text-body-secondary">© <span id="copyrightYear"></span> Kavya, Inc</span>
         </div>
     
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
