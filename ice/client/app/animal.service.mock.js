@@ -28,7 +28,7 @@ AnimalService.prototype.getAnimalPage = function ({ page = 1, perPage = 15 }) {
                 pages: Math.ceil(records.length / perPage)
             }
             //for test purpose
-            if (pagination.page == pagination.pages) {
+            if (pagination.page == 2) {
                 reject("No Serivce");
             }
             let start = (pagination.page - 1) * perPage;
@@ -73,7 +73,7 @@ AnimalService.prototype.findAnimal = function (animalName) {
         const self = this;
         setTimeout(() => {
             if (animalName == 'name 0') {
-                reject('No serivce');
+                reject('No service');
             }
             else {
                 const animals = self.getAnimals();

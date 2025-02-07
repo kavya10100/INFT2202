@@ -1,3 +1,4 @@
+
 import animalService from "../animal.service.mock.js";
 
 async function animal(name) {
@@ -5,6 +6,9 @@ async function animal(name) {
     let description = 'Add Animal';
     let animal = null;
     function createContent() {
+        if(description == 'No service'){
+            return '';
+        }
         const container = document.createElement('div');
         container.classList.add('mb-2');
         //create animal form content
@@ -27,24 +31,21 @@ async function animal(name) {
         const mb3Leg = document.createElement('div');
         mb3Leg.classList.add('mb-3');
         mb3Leg.innerHTML = '<label for="legs" class="form-label">Number of Legs</label>' +
-             `<input type="text" class="form-control" id="legs" name="legs" value="${animal!=null?animal.legs:""}">` +
-
+            '<input type="text" class="form-control" id="legs" name="legs">' +
             '<p class="text-danger d-none"></p>';
         container.append(mb3Leg);
         
         const mb3Eye = document.createElement('div');
         mb3Eye.classList.add('mb-3');
         mb3Eye.innerHTML = '<label for="eyes" class="form-label">Number of Eyes</label>' +
-            `<input type="text" class="form-control" id="eyes" name="eyes" value="${animal!=null?animal.eyes:""}">` +
-
+            '<input type="text" class="form-control" id="eyes" name="eyes">' +
             '<p class="text-danger d-none"></p>';
         container.append(mb3Eye);
         
         const mb3Sound = document.createElement('div');
         mb3Sound.classList.add('mb-3');
         mb3Sound.innerHTML = '<label for="sound" class="form-label">Sound this animal makes</label>' +
-            `<input type="text" class="form-control" id="sound" name="sound" value="${animal!=null?animal.sound:""}">` +
-
+            '<input type="text" class="form-control" id="sound" name="sound">' +
             '<p class="text-danger d-none"></p>';
         container.append(mb3Sound);        
 
@@ -152,13 +153,19 @@ async function animal(name) {
     }
     else{
         description = 'Update Animal';
-        let ret = await animalService.findAnimal(name);
-        animal = ret[0];
-        form.addEventListener('submit', function (event) {
-            // prevent the default action from happening
-            event.preventDefault();
-            submit("update");
-        });         
+        try{
+            let ret = await animalService.findAnimal(name);
+            animal = ret[0];
+            form.addEventListener('submit', function (event) {
+                // prevent the default action from happening
+                event.preventDefault();
+                submit("update");
+            });
+        }
+        catch(err){
+//show err on page
+            description = err;
+        }
     }
 
     return {
