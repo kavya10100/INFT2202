@@ -27,24 +27,15 @@ async function animal(name) {
         const mb3Leg = document.createElement('div');
         mb3Leg.classList.add('mb-3');
         mb3Leg.innerHTML = '<label for="legs" class="form-label">Number of Legs</label>' +
-<<<<<<< HEAD
         `<input type="text" class="form-control" id="legs" name="legs" value="${animal!=null?animal.legs:""}">` +
 
-=======
-            `<input type="text" class="form-control" id="legs" name="legs" value="${animal!=null?animal.legs:""}">` +
-            
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
             '<p class="text-danger d-none"></p>';
         container.append(mb3Leg);
         
         const mb3Eye = document.createElement('div');
         mb3Eye.classList.add('mb-3');
         mb3Eye.innerHTML = '<label for="eyes" class="form-label">Number of Eyes</label>' +
-<<<<<<< HEAD
         `<input type="text" class="form-control" id="eyes" name="eyes" value="${animal!=null?animal.eyes:""}">` +
-=======
-            `<input type="text" class="form-control" id="eyes" name="eyes" value="${animal!=null?animal.eyes:""}">` +
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
 
             '<p class="text-danger d-none"></p>';
         container.append(mb3Eye);
@@ -52,14 +43,8 @@ async function animal(name) {
         const mb3Sound = document.createElement('div');
         mb3Sound.classList.add('mb-3');
         mb3Sound.innerHTML = '<label for="sound" class="form-label">Sound this animal makes</label>' +
-<<<<<<< HEAD
         `<input type="text" class="form-control" id="sound" name="sound" value="${animal!=null?animal.sound:""}">` +
 
-=======
-            `<input type="text" class="form-control" id="sound" name="sound" value="${animal!=null?animal.sound:""}">` +
-
-            
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
             '<p class="text-danger d-none"></p>';
         container.append(mb3Sound);        
 

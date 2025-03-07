@@ -5,11 +5,7 @@
 export default new AnimalService({
     host: 'https://inft2202-server.onrender.com/',
     //host: 'http://localhost:3091',
-<<<<<<< HEAD
     user: 'your student id'
-=======
-    user: '100934387'
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
 });
 
 /*
