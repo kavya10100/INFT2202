@@ -1,6 +1,6 @@
-import animalService from "../animal.service.js";
+import animalService from "./animal.service.mock.js";
 
-async function animal(name) {
+function animal(name) {
     const form = document.createElement('form');
     let description = 'Add Animal';
     let animal = null;
@@ -27,39 +27,21 @@ async function animal(name) {
         const mb3Leg = document.createElement('div');
         mb3Leg.classList.add('mb-3');
         mb3Leg.innerHTML = '<label for="legs" class="form-label">Number of Legs</label>' +
-<<<<<<< HEAD
-        `<input type="text" class="form-control" id="legs" name="legs" value="${animal!=null?animal.legs:""}">` +
-
-=======
             `<input type="text" class="form-control" id="legs" name="legs" value="${animal!=null?animal.legs:""}">` +
-            
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
             '<p class="text-danger d-none"></p>';
         container.append(mb3Leg);
         
         const mb3Eye = document.createElement('div');
         mb3Eye.classList.add('mb-3');
         mb3Eye.innerHTML = '<label for="eyes" class="form-label">Number of Eyes</label>' +
-<<<<<<< HEAD
         `<input type="text" class="form-control" id="eyes" name="eyes" value="${animal!=null?animal.eyes:""}">` +
-=======
-            `<input type="text" class="form-control" id="eyes" name="eyes" value="${animal!=null?animal.eyes:""}">` +
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
-
             '<p class="text-danger d-none"></p>';
         container.append(mb3Eye);
         
         const mb3Sound = document.createElement('div');
         mb3Sound.classList.add('mb-3');
         mb3Sound.innerHTML = '<label for="sound" class="form-label">Sound this animal makes</label>' +
-<<<<<<< HEAD
-        `<input type="text" class="form-control" id="sound" name="sound" value="${animal!=null?animal.sound:""}">` +
-
-=======
-            `<input type="text" class="form-control" id="sound" name="sound" value="${animal!=null?animal.sound:""}">` +
-
-            
->>>>>>> 3ac85d4fbec3435546aa0113bc3a045b5329bd72
+       `<input type="text" class="form-control" id="sound" name="sound" value="${animal!=null?animal.sound:""}">` +
             '<p class="text-danger d-none"></p>';
         container.append(mb3Sound);        
 
@@ -118,7 +100,7 @@ async function animal(name) {
         return valid
     }    
     // create a handler to deal with the submit event
-    async function submit(action) {
+    function submit(action) {
         // validate the form
         const valid = validate();
         // do stuff if the form is valid
@@ -139,9 +121,9 @@ async function animal(name) {
             const eleNameError = form.name.nextElementSibling
             try {
                 if(action=="new"){
-                    await animalService.saveAnimal([animalObject]);
+                    animalService.saveAnimal(animalObject);
                 } else {
-                    await animalService.updateAnimal(animalObject)
+                    animalService.updateAnimal(animalObject)
                 } 
                 eleNameError.classList.add('d-none');
                 form.reset();
@@ -167,22 +149,12 @@ async function animal(name) {
     }
     else{
         description = 'Update Animal';
-        try{
-            let ret = await animalService.findAnimal(name);
-            if(ret.length == 0){
-                throw 'No record';
-            }
-            animal = ret[0];
-            form.addEventListener('submit', function (event) {
-                // prevent the default action from happening
-                event.preventDefault();
-                submit("update");
-            });
-        }
-        catch(err){
-//show err on page
-            description = err;
-        }
+        animal = animalService.findAnimal(name);
+        form.addEventListener('submit', function (event) {
+            // prevent the default action from happening
+            event.preventDefault();
+            submit("update");
+        });         
     }
 
     return {
