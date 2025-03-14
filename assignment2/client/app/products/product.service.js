@@ -5,7 +5,7 @@
 export default new ProductService({
     host: 'https://inft2202-server.onrender.com/',
     //host: 'http://localhost:3091',
-    user: 'your student id'
+    user: '100934387'
 });
 
 /*

@@ -1,6 +1,6 @@
 /* create.js */
 
-import productService from "./product.service.mock.js";
+import productService from "./product.service.js";
 
 console.log('We are on the add product page');
 

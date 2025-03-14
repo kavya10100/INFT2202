@@ -1,6 +1,6 @@
 /* index.js */
 
-import productService from "./product.service.mock.js";
+import productService from "./product.service.js";
 
 function product(name) {
     const form = document.createElement('form');
