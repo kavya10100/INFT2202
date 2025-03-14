@@ -1,66 +1,80 @@
-/* product.service.mock.js */
 
-class ProductService {
-    constructor() {
-        if (!localStorage.getItem('products')) {
-            localStorage.setItem('products', JSON.stringify([]));
-        }
+/*
+ *  Service constructor
+ */
+function ProductService() {
+    // if there is no entry for products in local storage
+    if (!localStorage.getItem('products')) {
+        // create a new entry in local storage and put an empty array in it
+        localStorage.setItem('products', JSON.stringify([]))
     }
+}
 
-    getProducts() {
-        return JSON.parse(localStorage.getItem('products'));
-    }
+/*
+ *
+ */
+ProductService.prototype.getProducts = function() {
+    // this will always be set, because we did it in the constructor
+    return JSON.parse(localStorage.getItem('products'));
+}
 
-    getProductPage({ page = 1, perPage = 15 }) {
-        let records = this.getProducts();
-        let pagination = {
-            page: page,
-            perPage: perPage,
-            pages: Math.ceil(records.length / perPage)
-        };
-        if (pagination.page < 1) pagination.page = 1;
-        if (pagination.page > pagination.pages) pagination.page = pagination.pages;
-        let start = (pagination.page - 1) * perPage;
-        let end = start + perPage;
-        return {
-            records: records.slice(start, end),
-            pagination
-        };
+/*
+ *
+ */
+ProductService.prototype.saveProduct = function(product) {
+    // get a list of products
+    const products = this.getProducts();
+    // see if this product already exists
+    if (products.find(a => a.name == product.name)) {
+        // tell the caller we're not going to save this
+        throw new Error('An product with that name already exists!');
     }
+    // if it doesn't, add it to the array
+    products.push(product);
+    // and save it in storage again
+    localStorage.setItem('products', JSON.stringify(products));
+    // tell the caller all was well
+    return true;
+}
 
-    saveProduct(product) {
-        const products = this.getProducts();
-        if (products.find(p => p.name === product.name)) {
-            throw new Error('A product with that name already exists!');
-        }
-        products.push(product);
-        localStorage.setItem('products', JSON.stringify(products));
-        return true;
+/*
+ *
+ */
+ProductService.prototype.findProduct = function(productName) {
+    const products = this.getProducts();
+    const product = products.find(a => a.name == productName);
+    if (!product) {
+        throw new Error('That product does not exist!');
     }
+    return product;
+}
 
-    findProduct(productName) {
-        return this.getProducts().find(p => p.name === productName) || null;
+/*
+ *
+ */
+ProductService.prototype.updateProduct = function(product) {
+    const products = this.getProducts();
+    const idx = products.findIndex(a => a.name == product.name);
+    if (idx === -1) {
+        throw new Error('That product does not exist!');
     }
+    products[idx] = product;
+    localStorage.setItem('products', JSON.stringify(products));
+    return true;
+}
 
-    updateProduct(updatedProduct) {
-        let products = this.getProducts();
-        let index = products.findIndex(p => p.name === updatedProduct.name);
-        if (index === -1) return false;
-        products[index] = updatedProduct;
-        localStorage.setItem('products', JSON.stringify(products));
-        return true;
+/*
+ *
+ */
+ProductService.prototype.deleteProduct = function(product) {
+    const products = this.getProducts();
+    const idx = products.findIndex(a => a.name == product.name);
+    if (idx === -1) {
+        throw new Error('That product does not exist!');
     }
-
-    deleteProduct(product) {
-        let products = this.getProducts();
-        let idx = products.findIndex(p => p.name === product.name);
-        if (idx === -1) {
-            throw new Error('That product does not exist!');
-        }
-        products.splice(idx, 1);
-        localStorage.setItem('products', JSON.stringify(products));
-        return true;
-    }
+    products.splice(idx, 1);
+    localStorage.setItem('products', JSON.stringify(products));
+    return true;
 }
 
 export default new ProductService();

@@ -1,6 +1,6 @@
 /* list.js */
 
-import productService from "./product.service.js";
+import productService from "../product.service.js";
 
 console.log('We are on the product list page');
 
