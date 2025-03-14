@@ -75,6 +75,20 @@
       </ul>
     </div>
   </footer>
+</footer>
+<script type="module">
+    import listBuilder from  "./app/products/list.js";
+
+    let params = new URL(document.location).searchParams;
+    let recordPage = {
+      page: Number(params.get('page') ?? 1),
+      perPage: Number(params.get('perPage') ?? 7)
+    }
+    const list = listBuilder(recordPage);
+
+    let container = document.querySelector('main');
+    container.append(list.element);
+</script>  
 </body>
 
 </html>
