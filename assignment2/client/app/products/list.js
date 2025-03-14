@@ -1,89 +1,134 @@
-/* list.js */
-
 import productService from "../product.service.js";
 
-console.log('We are on the product list page');
+function list(recordPage) {
+    const container = document.createElement('div');
+    container.classList.add('container');
 
-const params = new URL(document.location).searchParams;
-let recCount = params.get("records");
-if (recCount !== null) {
-    let index = 0;
-    while (recCount-- > 0) {
-        productService.saveProduct({
-            "name": `Product ${index++}`,
-            "price": 10,
-            "stock": 5,
-            "desc": "Sample product description."
+    // Loading spinner
+    const divWaiting = document.createElement('div');
+    divWaiting.classList.add('text-center');
+    divWaiting.innerHTML = '<i class="fa fa-5x fa-spinner fa-spin"></i>';
+    container.append(divWaiting);
+
+    // Error/success message container
+    const divMessage = document.createElement('div');
+    divMessage.classList.add('alert', 'text-center', 'd-none');
+    container.append(divMessage);
+
+    // Function to draw pagination
+    function drawPagination({ page = 1, perPage = 5, pages = 10 }) {
+        function addPage(number, text, style) {
+            return `<li class="page-item ${style}">
+              <a class="page-link" href="./list.html?page=${number}&perPage=${perPage}">${text}</a>
+            </li>`;
+        }
+
+        const pagination = document.createElement('div');
+        if (pages > 1) {
+            pagination.classList.remove('d-none');
+        }
+
+        const ul = document.createElement("ul");
+        ul.classList.add('pagination');
+        ul.insertAdjacentHTML('beforeend', addPage(page - 1, 'Previous', (page == 1) ? 'disabled' : ''));
+        for (let i = 1; i <= pages; i++) {
+            ul.insertAdjacentHTML('beforeend', addPage(i, i, (i == page) ? 'active' : ''));
+        }
+        ul.insertAdjacentHTML('beforeend', addPage(page + 1, 'Next', (page == pages) ? 'disabled' : ''));
+
+        pagination.append(ul);
+        return pagination;
+    }
+
+    // Function to draw the product table
+    function drawProductTable(products) {
+        const eleTable = document.createElement('table');
+        eleTable.classList.add('table', 'table-striped');
+
+        // Create table header
+        const thead = eleTable.createTHead();
+        const row = thead.insertRow();
+        const headers = ['Name', 'Price', 'Stock', 'Description', 'Actions'];
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            row.appendChild(th);
         });
+
+        // Create table rows for each product
+        for (let product of products) {
+            const row = eleTable.insertRow();
+            row.insertCell().textContent = product.name;
+            row.insertCell().textContent = product.price;
+            row.insertCell().textContent = product.stock;
+            row.insertCell().textContent = product.desc;
+
+            // Create a cell for action buttons
+            const eleBtnCell = row.insertCell();
+            eleBtnCell.classList.add('text-center');
+
+            // Delete button
+            const eleBtnDelete = document.createElement('button');
+            eleBtnDelete.classList.add('btn', 'btn-danger', 'mx-1');
+            eleBtnDelete.innerHTML = `<i class="fa fa-trash"></i>`;
+            eleBtnDelete.addEventListener('click', onDeleteButtonClick(product));
+            eleBtnCell.append(eleBtnDelete);
+
+            // Edit button
+            const eleBtnEdit = document.createElement('a');
+            eleBtnEdit.classList.add('btn', 'btn-primary', 'mx-1');
+            eleBtnEdit.innerHTML = `<i class="fa fa-edit"></i>`;
+            eleBtnEdit.href = `./product.html?name=${product.name}`;
+            eleBtnCell.append(eleBtnEdit);
+        }
+
+        return eleTable;
     }
-}
 
-const eleEmpty = document.getElementById('empty-message');
-const eleTable = document.getElementById('product-list');
-
-let recordPage = {
-    page: Number(params.get('page') ?? 1),
-    perPage: Number(params.get('perPage') ?? 7)
-};
-const { records, pagination } = productService.getProductPage(recordPage);
-
-if (!records.length) {
-    eleEmpty.classList.remove('d-none');
-    eleTable.classList.add('d-none');
-} else {
-    eleEmpty.classList.add('d-none');
-    eleTable.classList.remove('d-none');
-    drawProductTable(records);
-    drawPagination(pagination);
-}
-
-function drawPagination({ page = 1, perPage = 5, pages = 10 }) {
-    const pagination = document.getElementById('pagination');
-    if (pages > 1) {
-        pagination.classList.remove('d-none');
+    // Function to handle delete button click
+    function onDeleteButtonClick(product) {
+        return event => {
+            productService.deleteProduct(product.name).then(() => {
+                window.location.reload();
+            });
+        };
     }
-    const ul = document.createElement("ul");
-    ul.classList.add('pagination');
-    ul.insertAdjacentHTML('beforeend', addPage(page - 1, 'Previous', (page == 1) ? 'disabled' : ''));
-    for (let i = 1; i <= pages; i++) {
-        ul.insertAdjacentHTML('beforeend', addPage(i, i, (i == page) ? 'active' : ''));
+
+    // Function to create the content dynamically
+    function createContent() {
+        productService.getProductPage(recordPage)
+            .then((ret) => {
+                let { records, pagination } = ret;
+
+                // Hide loading spinner
+                divWaiting.classList.add('d-none');
+
+                // Create header with title and pagination
+                let header = document.createElement('div');
+                header.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'mb-4');
+                let h1 = document.createElement('h1');
+                h1.innerHTML = 'Product List';
+                header.append(h1);
+                header.append(drawPagination(pagination));
+
+                // Append header and table to the container
+                container.append(header);
+                container.append(drawProductTable(records));
+            })
+            .catch(err => {
+                // Show error message
+                divWaiting.classList.add('d-none');
+                divMessage.innerHTML = err;
+                divMessage.classList.remove('d-none');
+                divMessage.classList.add('alert-danger');
+            });
+
+        return container;
     }
-    ul.insertAdjacentHTML('beforeend', addPage(page + 1, 'Next', (page == pages) ? 'disabled' : ''));
-    pagination.append(ul);
 
-    function addPage(number, text, style) {
-        return `<li class="page-item ${style}">
-            <a class="page-link" href="./list.html?page=${number}&perPage=${perPage}">${text}</a>
-        </li>`;
-    }
-}
-
-function drawProductTable(products) {
-    for (let product of products) {
-        const row = eleTable.insertRow();
-        row.insertCell().textContent = product.name;
-        row.insertCell().textContent = product.price;
-        row.insertCell().textContent = product.stock;
-        row.insertCell().textContent = product.desc;
-
-        const eleBtnCell = row.insertCell();
-        const eleBtnDelete = document.createElement('button');
-        eleBtnDelete.classList.add('btn', 'btn-danger', 'mx-1');
-        eleBtnDelete.innerHTML = `<i class="fa fa-trash"></i>`;
-        eleBtnDelete.addEventListener('click', onDeleteButtonClick(product));
-        eleBtnCell.append(eleBtnDelete);
-
-        const eleBtnEdit = document.createElement('a');
-        eleBtnEdit.classList.add('btn', 'btn-primary', 'mx-1');
-        eleBtnEdit.innerHTML = `<i class="fa fa-edit"></i>`;
-        eleBtnEdit.href = `./product.html?name=${product.name}`;
-        eleBtnCell.append(eleBtnEdit);
-    }
-}
-
-function onDeleteButtonClick(product) {
-    return event => {
-        productService.deleteProduct(product);
-        window.location.reload();
+    return {
+        element: createContent()
     };
 }
+
+export default list;
