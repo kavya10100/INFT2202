@@ -35,7 +35,7 @@ async function animal(name) {
         const mb3Eye = document.createElement('div');
         mb3Eye.classList.add('mb-3');
         mb3Eye.innerHTML = '<label for="eyes" class="form-label">Number of Eyes</label>' +
-        `<input type="text" class="form-control" id="eyes" name="eyes" value="${animal!=null?animal.eyes:""}">` +
+        `<input type="text" class="form-control" id="eyes" name="breed" eyes="${animal!=null?animal.eyes:""}">` +
 
             '<p class="text-danger d-none"></p>';
         container.append(mb3Eye);
@@ -50,6 +50,7 @@ async function animal(name) {
 
         const submitBtn = document.createElement('div');
         submitBtn.innerHTML = '<button type="submit" class="btn btn-primary">' +
+        
             'Save Animal <i class="fa-solid fa-check"></i>' +
             '</button>';
         container.append(submitBtn);        
