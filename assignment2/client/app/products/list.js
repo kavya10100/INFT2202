@@ -16,7 +16,7 @@ function list(recordPage) {
     container.append(divMessage);
 
     // Function to draw pagination
-    function drawPagination({ page = 1, perPage = 5, pages = 10 }) {
+    function drawPagination({ page = 1, perPage = 8, pages = 10 }) {
         function addPage(number, text, style) {
             return `<li class="page-item ${style}">
               <a class="page-link" href="./list.html?page=${number}&perPage=${perPage}">${text}</a>
@@ -88,9 +88,21 @@ function list(recordPage) {
     // Function to handle delete button click
     function onDeleteButtonClick(product) {
         return event => {
-            productService.deleteProduct(product.name).then(() => {
-                window.location.reload();
-            });
+            productService.deleteProduct(product.name)
+                .then((success) => {
+                    if (success) {
+                        window.location.reload();
+                    } else {
+                        divMessage.innerHTML = 'Failed to delete product.';
+                        divMessage.classList.remove('d-none');
+                        divMessage.classList.add('alert-danger');
+                    }
+                })
+                .catch(err => {
+                    divMessage.innerHTML = 'An error occurred while deleting the product.';
+                    divMessage.classList.remove('d-none');
+                    divMessage.classList.add('alert-danger');
+                });
         };
     }
 
@@ -118,7 +130,7 @@ function list(recordPage) {
             .catch(err => {
                 // Show error message
                 divWaiting.classList.add('d-none');
-                divMessage.innerHTML = err;
+                divMessage.innerHTML = 'Failed to load products. Please try again later.';
                 divMessage.classList.remove('d-none');
                 divMessage.classList.add('alert-danger');
             });
@@ -131,4 +143,4 @@ function list(recordPage) {
     };
 }
 
-export default list;
+export default list;s
