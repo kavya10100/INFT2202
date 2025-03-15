@@ -143,4 +143,4 @@ function list(recordPage) {
     };
 }
 
-export default list;s
+export default list;
