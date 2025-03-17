@@ -110,6 +110,7 @@ function list(recordPage) {
     function createContent() {
         productService.getProductPage(recordPage)
             .then((ret) => {
+                console.log("API Response:", ret); // Debugging line
                 let { records, pagination } = ret;
 
                 // Hide loading spinner
@@ -128,7 +129,7 @@ function list(recordPage) {
                 container.append(drawProductTable(records));
             })
             .catch(err => {
-                // Show error message
+                console.error("Error fetching products:", err); // Debugging line
                 divWaiting.classList.add('d-none');
                 divMessage.innerHTML = 'Failed to load products. Please try again later.';
                 divMessage.classList.remove('d-none');
