@@ -16,7 +16,7 @@ function list(recordPage) {
     container.append(divMessage);
 
     // Function to draw pagination
-    function drawPagination({ page = 1, perPage = 8, pages = 10 }) {
+    function drawPagination({ page = 1, perPage = 5, pages = 10 }) {
         function addPage(number, text, style) {
             return `<li class="page-item ${style}">
               <a class="page-link" href="./list.html?page=${number}&perPage=${perPage}">${text}</a>
@@ -130,12 +130,12 @@ function list(recordPage) {
                 console.log("API Response:", ret); // Debugging line
 
                 // Ensure ret is defined and has the expected structure
-                if (!ret || !ret.data || !Array.isArray(ret.data.products)) {
+                if (!ret || !ret.records || !Array.isArray(ret.records)) {
                     console.error("Invalid API response format:", ret);
                     throw new Error("Invalid API response format");
                 }
 
-                let { products, pagination } = ret.data; // Extract products and pagination from the response
+                let { records, pagination } = ret;
 
                 // Hide loading spinner
                 divWaiting.classList.add('d-none');
@@ -150,7 +150,7 @@ function list(recordPage) {
 
                 // Append header and table to the container
                 container.append(header);
-                container.append(drawProductTable(products)); // Pass the products array
+                container.append(drawProductTable(records));
             })
             .catch(err => {
                 console.error("Error fetching products:", err); // Debugging line
