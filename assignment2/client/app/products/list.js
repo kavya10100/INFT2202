@@ -123,6 +123,7 @@ function list(recordPage) {
 
                 // Ensure ret is defined and has the expected structure
                 if (!ret || !ret.records || !Array.isArray(ret.records)) {
+                    console.error("Invalid API response format:", ret);
                     throw new Error("Invalid API response format");
                 }
 
