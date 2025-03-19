@@ -42,6 +42,15 @@ function list(recordPage) {
 
     // Function to draw the product table
     function drawProductTable(products) {
+        // Ensure products is an array
+        if (!Array.isArray(products)) {
+            console.error("Expected an array of products, but got:", products);
+            const errorMessage = document.createElement('div');
+            errorMessage.classList.add('alert', 'alert-danger');
+            errorMessage.textContent = 'No products found or invalid data format.';
+            return errorMessage;
+        }
+
         const eleTable = document.createElement('table');
         eleTable.classList.add('table', 'table-striped');
 
@@ -111,6 +120,12 @@ function list(recordPage) {
         productService.getProductPage(recordPage)
             .then((ret) => {
                 console.log("API Response:", ret); // Debugging line
+
+                // Ensure ret is defined and has the expected structure
+                if (!ret || !ret.records || !Array.isArray(ret.records)) {
+                    throw new Error("Invalid API response format");
+                }
+
                 let { records, pagination } = ret;
 
                 // Hide loading spinner
