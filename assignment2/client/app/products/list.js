@@ -51,6 +51,14 @@ function list(recordPage) {
             return errorMessage;
         }
 
+        // If products array is empty, show a message
+        if (products.length === 0) {
+            const noProductsMessage = document.createElement('div');
+            noProductsMessage.classList.add('alert', 'alert-info');
+            noProductsMessage.textContent = 'No products found.';
+            return noProductsMessage;
+        }
+
         const eleTable = document.createElement('table');
         eleTable.classList.add('table', 'table-striped');
 
@@ -122,12 +130,12 @@ function list(recordPage) {
                 console.log("API Response:", ret); // Debugging line
 
                 // Ensure ret is defined and has the expected structure
-                if (!ret || !ret.records || !Array.isArray(ret.records)) {
+                if (!ret || !ret.data || !Array.isArray(ret.data.products)) {
                     console.error("Invalid API response format:", ret);
                     throw new Error("Invalid API response format");
                 }
 
-                let { records, pagination } = ret;
+                let { products, pagination } = ret.data; // Extract products and pagination from the response
 
                 // Hide loading spinner
                 divWaiting.classList.add('d-none');
@@ -142,7 +150,7 @@ function list(recordPage) {
 
                 // Append header and table to the container
                 container.append(header);
-                container.append(drawProductTable(records));
+                container.append(drawProductTable(products)); // Pass the products array
             })
             .catch(err => {
                 console.error("Error fetching products:", err); // Debugging line
