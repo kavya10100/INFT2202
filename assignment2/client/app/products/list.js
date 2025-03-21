@@ -48,7 +48,7 @@ function list(recordPage) {
         // Table header
         const thead = eleTable.createTHead();
         const row = thead.insertRow();
-        const headers = ['Name', 'Price', 'Category', 'Stock', 'Actions'];
+        const headers = ['Name', 'Price', 'Description', 'Stock', 'Actions'];
         headers.forEach(headerText => {
             const th = document.createElement('th');
             th.textContent = headerText;
@@ -60,7 +60,7 @@ function list(recordPage) {
             const row = eleTable.insertRow();
             row.insertCell().textContent = product.name;
             row.insertCell().textContent = `$${product.price}`;
-            row.insertCell().textContent = product.category;
+            row.insertCell().textContent = product.description;
             row.insertCell().textContent = product.stock;
 
             // Action buttons
