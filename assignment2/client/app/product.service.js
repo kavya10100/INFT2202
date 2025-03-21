@@ -51,15 +51,22 @@ ProductService.prototype.getProductPage = async function({ page = 1, perPage = 8
         const res = await fetch(req);
         if (!res.ok) throw new Error(`Failed to fetch products: ${res.statusText}`);
         const data = await res.json();
+
+        // Ensure the response contains the expected structure
+        if (!data.products || !Array.isArray(data.products)) {
+            throw new Error('Invalid response format: products is not an array');
+        }
+
         return {
-            records: data.products, // Ensure the backend returns an array of products
+            records: data.products, // Array of products
             pagination: {
-                page: data.page,
-                perPage: data.perPage,
-                pages: data.pages
+                page: data.page || page,
+                perPage: data.perPage || perPage,
+                pages: data.pages || Math.ceil(data.total / perPage)
             }
         };
     } catch (err) {
+        console.error('Error in getProductPage:', err); // Debugging
         throw new Error(`Error fetching product page: ${err.message}`);
     }
 }

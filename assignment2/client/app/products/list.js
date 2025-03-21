@@ -42,6 +42,11 @@ function list(recordPage) {
 
     // Product table
     function drawProductTable(products) {
+        if (!Array.isArray(products)) {
+            console.error('Expected an array of products, but got:', products);
+            return document.createElement('div'); // Return an empty div as a fallback
+        }
+
         const eleTable = document.createElement('table');
         eleTable.classList.add('table', 'table-striped');
 
@@ -96,6 +101,11 @@ function list(recordPage) {
     function createContent() {
         productService.getProductPage(recordPage)
             .then((ret) => {
+                console.log('Data returned from productService.getProductPage:', ret); // Debugging
+                if (!ret || !Array.isArray(ret.records)) {
+                    throw new Error('Invalid data format: records is not an array');
+                }
+
                 let { records, pagination } = ret;
                 divWaiting.classList.add('d-none');
 
@@ -112,8 +122,9 @@ function list(recordPage) {
                 container.append(drawProductTable(records));
             })
             .catch(err => {
+                console.error('Error in createContent:', err); // Debugging
                 divWaiting.classList.add('d-none');
-                divMessage.innerHTML = err;
+                divMessage.innerHTML = err.message || 'An error occurred';
                 divMessage.classList.remove('d-none');
                 divMessage.classList.add('alert-danger');
             });
