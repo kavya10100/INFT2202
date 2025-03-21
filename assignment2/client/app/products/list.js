@@ -1,4 +1,4 @@
-import productService from '../product.service.js';
+import productService from "../product.service.js";
 
 function list(recordPage) {
     const container = document.createElement('div');
@@ -10,12 +10,12 @@ function list(recordPage) {
     divWaiting.innerHTML = '<i class="fa fa-5x fa-spinner fa-spin"></i>';
     container.append(divWaiting);
 
-    // Error/success message container
+    // Error message container
     const divMessage = document.createElement('div');
     divMessage.classList.add('alert', 'text-center', 'd-none');
     container.append(divMessage);
 
-    // Function to draw pagination
+    // Pagination
     function drawPagination({ page = 1, perPage = 5, pages = 10 }) {
         function addPage(number, text, style) {
             return `<li class="page-item ${style}">
@@ -40,49 +40,32 @@ function list(recordPage) {
         return pagination;
     }
 
-    // Function to draw the product table
+    // Product table
     function drawProductTable(products) {
-        // Ensure products is an array
-        if (!Array.isArray(products)) {
-            console.error("Expected an array of products, but got:", products);
-            const errorMessage = document.createElement('div');
-            errorMessage.classList.add('alert', 'alert-danger');
-            errorMessage.textContent = 'No products found or invalid data format.';
-            return errorMessage;
-        }
-
-        // If products array is empty, show a message
-        if (products.length === 0) {
-            const noProductsMessage = document.createElement('div');
-            noProductsMessage.classList.add('alert', 'alert-info');
-            noProductsMessage.textContent = 'No products found.';
-            return noProductsMessage;
-        }
-
         const eleTable = document.createElement('table');
         eleTable.classList.add('table', 'table-striped');
 
-        // Create table header
+        // Table header
         const thead = eleTable.createTHead();
         const row = thead.insertRow();
-        const headers = ['Name', 'Price', 'Stock', 'Description', 'Actions'];
+        const headers = ['Name', 'Price', 'Category', 'Stock', 'Actions'];
         headers.forEach(headerText => {
             const th = document.createElement('th');
             th.textContent = headerText;
             row.appendChild(th);
         });
 
-        // Create table rows for each product
+        // Table rows
         for (let product of products) {
             const row = eleTable.insertRow();
             row.insertCell().textContent = product.name;
-            row.insertCell().textContent = product.price;
+            row.insertCell().textContent = `$${product.price}`;
+            row.insertCell().textContent = product.category;
             row.insertCell().textContent = product.stock;
-            row.insertCell().textContent = product.desc;
 
-            // Create a cell for action buttons
+            // Action buttons
             const eleBtnCell = row.insertCell();
-            eleBtnCell.classList.add('text-center');
+            eleBtnCell.classList.add();
 
             // Delete button
             const eleBtnDelete = document.createElement('button');
@@ -95,67 +78,42 @@ function list(recordPage) {
             const eleBtnEdit = document.createElement('a');
             eleBtnEdit.classList.add('btn', 'btn-primary', 'mx-1');
             eleBtnEdit.innerHTML = `<i class="fa fa-edit"></i>`;
-            eleBtnEdit.href = `./product.html?name=${product.name}`;
+            eleBtnEdit.href = `./product.html?id=${product.id}`;
             eleBtnCell.append(eleBtnEdit);
         }
 
         return eleTable;
     }
 
-    // Function to handle delete button click
+    // Delete button handler
     function onDeleteButtonClick(product) {
         return event => {
-            productService.deleteProduct(product.name)
-                .then((success) => {
-                    if (success) {
-                        window.location.reload();
-                    } else {
-                        divMessage.innerHTML = 'Failed to delete product.';
-                        divMessage.classList.remove('d-none');
-                        divMessage.classList.add('alert-danger');
-                    }
-                })
-                .catch(err => {
-                    divMessage.innerHTML = 'An error occurred while deleting the product.';
-                    divMessage.classList.remove('d-none');
-                    divMessage.classList.add('alert-danger');
-                });
+            productService.deleteProduct(product.id).then(() => { window.location.reload(); });
         };
     }
 
-    // Function to create the content dynamically
+    // Create content
     function createContent() {
         productService.getProductPage(recordPage)
             .then((ret) => {
-                console.log("API Response:", ret); // Debugging line
-
-                // Ensure ret is defined and has the expected structure
-                if (!ret || !ret.records || !Array.isArray(ret.records)) {
-                    console.error("Invalid API response format:", ret);
-                    throw new Error("Invalid API response format");
-                }
-
                 let { records, pagination } = ret;
-
-                // Hide loading spinner
                 divWaiting.classList.add('d-none');
 
-                // Create header with title and pagination
+                // Header with title and pagination
                 let header = document.createElement('div');
-                header.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'mb-4');
+                header.classList.add('d-flex', 'justify-content-between');
                 let h1 = document.createElement('h1');
                 h1.innerHTML = 'Product List';
                 header.append(h1);
                 header.append(drawPagination(pagination));
 
-                // Append header and table to the container
+                // Append header and table to container
                 container.append(header);
                 container.append(drawProductTable(records));
             })
             .catch(err => {
-                console.error("Error fetching products:", err); // Debugging line
                 divWaiting.classList.add('d-none');
-                divMessage.innerHTML = 'Failed to load products. Please try again later.';
+                divMessage.innerHTML = err;
                 divMessage.classList.remove('d-none');
                 divMessage.classList.add('alert-danger');
             });
