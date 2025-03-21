@@ -1,4 +1,4 @@
-import productService from './app/products/product.service.js';
+import productService from '../product.service.js';
 
 function list(recordPage) {
     const container = document.createElement('div');
