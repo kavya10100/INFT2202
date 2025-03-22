@@ -1,11 +1,4 @@
 /*
-Name: Cheyenne Norsworthy
-Filename: create.js
-Course: INFT 2202
-Date: January 10, 2025
-Description: This is my general js create page.
-*/
-/*
  *  Service constructor
  */
 function AnimalService() {
@@ -35,9 +28,9 @@ AnimalService.prototype.getAnimalPage = function ({ page = 1, perPage = 15 }) {
                 pages: Math.ceil(records.length / perPage)
             }
             //for test purpose
-            //if (pagination.page == pagination.pages) {
-            //    reject("No Serivce");
-            //}
+            if (pagination.page == 2) {
+                reject("No Serivce");
+            }
             let start = (pagination.page - 1) * perPage;
             let end = start + perPage;
             resolve({
@@ -79,7 +72,7 @@ AnimalService.prototype.findAnimal = function (animalName) {
     return new Promise((resolve, reject) => {
         const self = this;
         setTimeout(() => {
-            if (animalName == '') {
+            if (animalName == 'name 0') {
                 reject('No service');
             }
             else {
@@ -100,7 +93,7 @@ AnimalService.prototype.updateAnimal = function (animal) {
     return new Promise((resolve, reject) => {
         const self = this;
         setTimeout(() => {
-            if (animal.name == '') {
+            if (animal.name == 'name 0') {
                 reject('No service');
             }
             else {
@@ -112,7 +105,6 @@ AnimalService.prototype.updateAnimal = function (animal) {
                 animals[idx] = animal;
                 localStorage.setItem('animals', JSON.stringify(animals));
                 resolve(true);
-
             }
         }, 250);
     });
