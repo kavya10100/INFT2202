@@ -1,6 +1,6 @@
-/*
+/*  
  *  Since we are using the regular function keyword, 
- *   we can export our service instance up here.
+ *  we can export our service instance up here.
  */
 export default new ProductService({
     host: 'https://inft2202-server.onrender.com/',
@@ -20,7 +20,7 @@ function ProductService({ host, user }) {
 }
 
 /*
- * Find a product by name
+ * Find a product by its name
  */
 ProductService.prototype.findProduct = async function(name) {
     const url = new URL(`/api/products/${name}`, this.host);
@@ -30,10 +30,9 @@ ProductService.prototype.findProduct = async function(name) {
     });
     try {
         const res = await fetch(req);
-        if (!res.ok) throw new Error(`Failed to fetch product: ${res.statusText}`);
         return res.json();
     } catch (err) {
-        throw new Error(`Error finding product: ${err.message}`);
+        return false;
     }
 }
 
@@ -49,25 +48,9 @@ ProductService.prototype.getProductPage = async function({ page = 1, perPage = 8
     });
     try {
         const res = await fetch(req);
-        if (!res.ok) throw new Error(`Failed to fetch products: ${res.statusText}`);
-        const data = await res.json();
-
-        // Ensure the response contains the expected structure
-        if (!data.products || !Array.isArray(data.products)) {
-            throw new Error('Invalid response format: products is not an array');
-        }
-
-        return {
-            records: data.products, // Array of products
-            pagination: {
-                page: data.page || page,
-                perPage: data.perPage || perPage,
-                pages: data.pages || Math.ceil(data.total / perPage)
-            }
-        };
+        return res.json();
     } catch (err) {
-        console.error('Error in getProductPage:', err); // Debugging
-        throw new Error(`Error fetching product page: ${err.message}`);
+        return false;
     }
 }
 
@@ -83,10 +66,9 @@ ProductService.prototype.saveProduct = async function(product) {
     });
     try {
         const res = await fetch(req);
-        if (!res.ok) throw new Error(`Failed to save product: ${res.statusText}`);
         return res.json();
     } catch (err) {
-        throw new Error(`Error saving product: ${err.message}`);
+        return false;
     }
 }
 
@@ -102,15 +84,14 @@ ProductService.prototype.updateProduct = async function(product) {
     });
     try {
         const res = await fetch(req);
-        if (!res.ok) throw new Error(`Failed to update product: ${res.statusText}`);
         return res.json();
     } catch (err) {
-        throw new Error(`Error updating product: ${err.message}`);
+        return false;
     }
 }
 
 /*
- * Delete a product by name
+ * Delete a product by its name
  */
 ProductService.prototype.deleteProduct = async function(name) {
     const url = new URL(`/api/products/${name}`, this.host);
@@ -123,8 +104,8 @@ ProductService.prototype.deleteProduct = async function(name) {
         if (res.status === 204) {
             return true;
         }
-        throw new Error(`Failed to delete product: ${res.statusText}`);
+        return false;
     } catch (err) {
-        throw new Error(`Error deleting product: ${err.message}`);
+        return false;
     }
 }
