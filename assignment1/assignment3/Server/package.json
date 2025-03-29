@@ -1,0 +1,16 @@
+{
+  "name": "assignment1-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "assignment1-server": "file:",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-validator": "^7.0.1",
+    "mongodb": "^6.15.0"
+  }
+}
